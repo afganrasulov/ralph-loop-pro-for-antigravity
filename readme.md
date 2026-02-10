@@ -1,46 +1,50 @@
 # Ralph Loop Pro for Antigravity
 
-An enhanced VSCode extension that brings the Ralph Loop autonomous AI agent methodology to Antigravity, featuring a dynamic model registry.
+> ⚠️ **ALPHA RELEASE** — This extension is under active development. Bugs are expected; updates and improvements will be shipped regularly.
+
+An autonomous AI agent extension for Antigravity that automates multi-step coding tasks through intelligent loop execution, dynamic model selection, and real-time progress tracking.
 
 ## Overview
 
-Developers using AI coding assistants face two key challenges:
+AI coding assistants are powerful, but they come with two fundamental limitations:
 
-1. **Context window limitations** - LLMs forget important context mid-task
-2. **Constant oversight required** - AI cannot work autonomously for extended periods
+1. **Context decay** — Large Language Models lose track of important details as conversations grow longer.
+2. **Manual babysitting** — Developers must constantly guide the AI, re-prompting after every completed step.
 
-The Ralph Loop methodology solves this by externalizing memory to files and running AI agents in iterative loops. This extension provides intuitive controls for managing these loops directly within VS Code.
+Ralph Loop Pro eliminates both problems. It externalizes the AI's memory into persistent files and orchestrates the agent in automated, iterative cycles. Each cycle gets a fresh context window, reads what's been done from disk, and picks up exactly where the last one left off — all without human intervention.
+
+This extension brings that workflow into VS Code with an intuitive sidebar, real-time status tracking, and one-click loop control.
 
 ## Quick Start
 
-1. **Install the extension** from the VSIX file
-2. **Create your PRD/spec file** (see [Task File Format](#task-file-format) below)
-   - Use **Planning mode** in Antigravity to help create a proper PRD with discrete tasks
-3. **Open the Ralph Loop sidebar** via the Activity Bar icon
-4. **Configure your session** in the sidebar:
-   - Select task file (default: `PRD.md`)
-   - Set progress file (default: `progress.txt`)
-   - Choose mode and model
-   - Set max iterations
-5. **Start the loop** using the play button in the sidebar
+1. **Install the extension** — via VSIX file or from the [Open VSX Registry](https://open-vsx.org/extension/afganrasulov/ralph-loop-pro-for-antigravity)
+2. **Prepare your task file** — Write a PRD or specification document broken into discrete tasks (see [Task File Format](#task-file-format))
+   - 💡 *Tip: Use Antigravity's **Planning mode** to generate a well-structured PRD automatically*
+3. **Open the sidebar** — Click the Ralph Loop icon in the Activity Bar
+4. **Configure your session:**
+   - Pick your task file (default: `PRD.md`)
+   - Set a progress file (default: `progress.txt`)
+   - Choose a mode and AI model
+   - Define the maximum number of iterations
+5. **Hit play** — The loop starts, and the agent works autonomously through your tasks
 
-> **Recommended Workflow (Antigravity):**  
-> Use **Planning mode** to create your PRD/spec file with well-defined tasks.  
-> Then switch to **Fast mode** to run the Ralph Loop for execution.
+> **💡 Recommended Workflow:**
+> Start with **Planning mode** to draft and refine your task file.
+> Then switch to **Fast mode** and let Ralph Loop execute the work automatically.
 
 ## File Structure
 
-The extension uses a simple file-based architecture:
+Ralph Loop uses a straightforward, file-based architecture — no databases, no hidden state:
 
-| File           | Purpose            | Description                                                  |
-|----------------|--------------------|--------------------------------------------------------------|
-| `PRD.md`       | Task Specification | Your tasks/requirements. **Read-only** for agent.            |
-| `progress.txt` | Progress Log       | Agent appends progress here. Source of truth for completion. |
-| `prompt.md`    | Instructions       | Optional custom instructions for the agent.                  |
+| File | Role | Details |
+|------|------|---------|
+| `PRD.md` | Task Specification | Contains your requirements and task list. **Read-only** — the agent never modifies this file. |
+| `progress.txt` | Progress Journal | The agent appends entries here after each step. Acts as the single source of truth for what's been completed. |
+| `prompt.md` | Custom Instructions | Optional file for additional guidance or constraints you want the agent to follow. |
 
 ### Task File Format
 
-The task file is **read-only** - the agent never modifies it. Write a proper PRD or specification document, but **organize it into discrete, actionable tasks** so the agent can identify what to work on next by cross-referencing `progress.txt`.
+Your task file should be a clear specification organized into **self-contained, actionable tasks**. The agent cross-references this file with `progress.txt` to determine what to work on next.
 
 ```markdown
 # PRD: User Management System
@@ -67,11 +71,11 @@ Build admin interface for user management.
 - View user activity logs
 ```
 
-The key is **clear task boundaries** - each `## Task N:` section should be a self-contained unit of work that the agent can complete in one iteration.
+**The golden rule:** Every `## Task N:` section should be small enough for the agent to complete in a single iteration, yet specific enough to produce meaningful output.
 
 ### Progress File Format
 
-The agent appends entries to track completion. This is how it knows which tasks are done:
+The agent logs its work automatically. Each entry creates a traceable record:
 
 ```bash
 [2026-01-21 10:30] Started: Task 1 - User Authentication
@@ -82,115 +86,101 @@ The agent appends entries to track completion. This is how it knows which tasks 
 
 ## Features
 
-### Activity Bar & Sidebar
+### 🎛️ Dedicated Sidebar
 
-Ralph Loop has a dedicated Activity Bar icon. The sidebar shows:
+Ralph Loop occupies its own panel in the Activity Bar, giving you full visibility and control:
 
-- **Session**: Current status, mode, model, iteration count, elapsed time
-- **Configuration**: All configurable options (click to change)
-  - Mode (Fast/Planning)
-  - Model
+- **Live Session Info** — See the current status, active mode, selected model, iteration count, and elapsed time at a glance
+- **Quick Configuration** — Adjust any setting with a single click:
+  - Mode (Fast / Planning)
+  - AI Model
   - Max Iterations
-  - Prompt File
-  - Task File
-  - Progress File
+  - Prompt, Task & Progress files
 
-### Status Bar
+### 📊 Status Bar Integration
 
-A persistent status bar item displays:
+A persistent indicator in the VS Code status bar keeps you informed without switching views:
 
-- Loop state: `Running`, `Paused`, or `Stopped`
+- Loop state: `Running` · `Paused` · `Stopped`
 - Current iteration: `15/50`
 - Elapsed time: `2m 34s`
 
-### Output Channel
+### 📝 Output Channel
 
-The **Ralph Loop** output channel provides:
+The **Ralph Loop** output channel streams everything happening under the hood:
 
-- Streaming agent responses
-- Iteration markers and phase tracking
-- Progress indicators
+- Real-time agent responses
+- Iteration boundaries and phase markers
+- Progress summaries per cycle
+
+### 🔄 Smart Auto-Completion
+
+When a loop begins, Ralph generates a unique completion marker (e.g., `ralph-done-a3x9k`). The agent appends this marker to the progress file once every task is finished.
+
+Before each new iteration, Ralph scans the progress file for this marker. If found, the loop ends on its own — no manual intervention required.
+
+- ✅ Loops stop automatically when all work is done
+- ✅ Unique markers per session prevent false positives from previous runs
+- ✅ Manual stop is always available as a fallback
 
 ## Commands
 
-| Command                            | Description                 |
-|------------------------------------|-----------------------------|
-| `Ralph: Start Ralph Loop`          | Start a new loop session    |
-| `Ralph: Stop Ralph Loop`           | Stop the loop gracefully    |
-| `Ralph: Pause/Resume Ralph Loop`   | Toggle pause state          |
-| `Ralph: Emergency Stop Ralph Loop` | Immediately stop the loop   |
+| Command | What It Does |
+|---------|-------------|
+| `Ralph: Start Ralph Loop` | Launch a new autonomous loop session |
+| `Ralph: Stop Ralph Loop` | Gracefully stop after the current iteration finishes |
+| `Ralph: Pause/Resume Ralph Loop` | Toggle between paused and running states |
+| `Ralph: Emergency Stop Ralph Loop` | Immediately terminate the loop mid-iteration |
 
 ## Configuration
 
-### Settings
+Customize Ralph Loop through VS Code Settings (`Preferences → Open Settings`):
 
-Configure Ralph Loop via VS Code Settings (`Preferences: Open Settings`):
-
-| Setting                    | Default          | Description                 |
-|----------------------------|------------------|-----------------------------|
-| `ralphLoop.maxIterations`  | `50`             | Maximum iterations per loop |
-| `ralphLoop.defaultMode`    | `Fast`           | Default mode                |
-| `ralphLoop.defaultModel`   | `Gemini 3 Flash` | Default AI model            |
-| `ralphLoop.promptFile`     | `None`           | Default prompt file         |
-| `ralphLoop.taskFile`       | `PRD.md`         | Default task file           |
-| `ralphLoop.progressFile`   | `progress.txt`   | Default progress file       |
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `ralphLoop.maxIterations` | `50` | Maximum number of iterations per loop |
+| `ralphLoop.defaultMode` | `Fast` | Default operating mode |
+| `ralphLoop.defaultModel` | `Gemini 3 Flash` | Default AI model for new sessions |
+| `ralphLoop.promptFile` | `None` | Path to a custom prompt file |
+| `ralphLoop.taskFile` | `PRD.md` | Path to your task specification |
+| `ralphLoop.progressFile` | `progress.txt` | Path to the progress journal |
 
 ## How It Works
 
-1. **Fresh Context Per Iteration**: Each iteration spawns a fresh cascade session, sending structured instructions that reference your task and progress files.
+1. **Fresh Context Every Cycle** — Each iteration starts a brand-new Cascade session with a clean context window, referencing only your task and progress files.
 
-2. **Structured Instructions**: The agent receives clear instructions:
-   - Read tasks from your task file
-   - Check progress in your progress file
-   - Complete exactly one task
-   - Append progress (never delete)
-   - Commit changes
+2. **Structured Agent Instructions** — The agent receives explicit directives:
+   - Read pending tasks from your task file
+   - Check the progress journal for completed work
+   - Execute exactly one task per iteration
+   - Append results to the progress file (never delete previous entries)
+   - Commit changes to version control
 
-3. **File-Based Memory**: Progress persists on disk between iterations in `progress.txt`, not in the agent's memory.
+3. **Disk-Based Memory** — All state lives in `progress.txt` on your filesystem, not in the AI's volatile memory. Context is rebuilt from scratch every iteration, making the process resilient to token limits.
 
-4. **Graceful Stop**: The stop command waits for the current iteration to complete.
+4. **Graceful Shutdown** — The stop command lets the current iteration finish before halting.
 
-5. **Emergency Stop**: Immediately terminates the loop.
-
-### Automatic Loop Completion
-
-When you start a loop, Ralph generates a unique completion marker (e.g., `ralph-done-a3x9k`). The agent is instructed to append this marker to the progress file when ALL tasks are complete.
-
-Before each iteration, Ralph checks the last few lines of your progress file for this marker. If found, the loop ends automatically - no manual stop needed.
-
-This means:
-
-- The loop stops on its own when work is done
-- Each loop session has a unique marker (prevents false positives from old runs)
-- You can still manually stop anytime if needed
+5. **Emergency Kill** — Instantly terminates the loop when something goes wrong.
 
 ## Troubleshooting
 
-### "No task file selected"
-
-Select a task file in the sidebar Configuration section.
-
-### "No workspace folder open"
-
-Open a folder in VS Code before starting Ralph Loop.
-
-### Loop not responding
-
-Use `Ralph: Emergency Stop Ralph Loop` from the Command Palette.
-
-### Wrong workspace
-
-The extension opens your task/prompt file before starting to ensure the agent works in the correct workspace.
+| Problem | Solution |
+|---------|----------|
+| *"No task file selected"* | Choose a task file from the sidebar's Configuration panel |
+| *"No workspace folder open"* | Open a project folder in VS Code before starting a loop |
+| *Loop not responding* | Use `Ralph: Emergency Stop Ralph Loop` from the Command Palette |
+| *Agent working in wrong directory* | The extension auto-opens your task file to anchor the workspace — ensure it's inside the correct project |
 
 ## Links
 
-- [GitHub Repository](https://github.com/afganrasulov/ralph-loop-pro-for-antigravity)
-- [Report Issues](https://github.com/afganrasulov/ralph-loop-pro-for-antigravity/issues)
-
-## Requirements
+- 📦 [Open VSX Registry](https://open-vsx.org/extension/afganrasulov/ralph-loop-pro-for-antigravity)
+- 🐙 [GitHub Repository](https://github.com/afganrasulov/ralph-loop-pro-for-antigravity)
+- 🐛 [Report Issues](https://github.com/afganrasulov/ralph-loop-pro-for-antigravity/issues)
 
 ## License
 
+MIT
+
 ---
 
-*Turn Antigravity into an autonomous, iterative coding agent.*
+*Transform Antigravity into a fully autonomous, self-driving coding agent.*

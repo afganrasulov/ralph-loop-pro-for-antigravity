@@ -1,9 +1,9 @@
 {
-  "name": "ralph-loop-for-antigravity",
-  "displayName": "Ralph Loop for Antigravity",
-  "description": "A VSCode extension that brings the Ralph Loop autonomous AI agent methodology to Antigravity",
+  "name": "ralph-loop-pro-for-antigravity",
+  "displayName": "Ralph Loop Pro for Antigravity",
+  "description": "⚠️ ALPHA — An autonomous AI agent extension for Antigravity. Automates multi-step coding tasks with intelligent loop execution and model selection. Early release — expect bugs, improvements coming with each update.",
   "icon": "resources/icons/logo.png",
-  "version": "0.5.1",
+  "version": "1.0.2",
   "publisher": "afganrasulov",
   "license": "MIT",
   "repository": {
