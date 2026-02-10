@@ -93,8 +93,6 @@ async function setConfigModel(context) {
             "Claude Sonnet 4.5",
             "Claude Sonnet 4.5 (Thinking)",
             "Claude Opus 4.6",
-            "Claude Opus 4.6 (Thinking)",
-            "GPT-OSS-120B (Medium)",
         ];
     }
     const currentModel = context.workspaceState.get("ralph.lastModel") ?? "Gemini 3 Flash";

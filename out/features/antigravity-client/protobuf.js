@@ -49,9 +49,7 @@ exports.MODEL_IDS = {
     "Gemini 3 Pro (High)": 1008,
     "Claude Sonnet 4.5": 333,
     "Claude Sonnet 4.5 (Thinking)": 334,
-    "Claude Opus 4.6": 1012,
-    "Claude Opus 4.6 (Thinking)": 1012,
-    "GPT-OSS-120B (Medium)": 342,
+    "Claude Opus 4.6": 1026,
 };
 function encodeVarint(value) {
     const bytes = [];

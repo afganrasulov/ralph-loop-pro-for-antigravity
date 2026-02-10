@@ -44,6 +44,7 @@ const loopCommands = __importStar(require("./features/loop-engine/commands"));
 const discovery_1 = require("./shared/utils/discovery");
 const workspace_1 = require("./shared/utils/workspace");
 const modelRegistry = require("./features/antigravity-client/modelRegistry");
+const dashboardPanel_1 = require("./features/dashboard/dashboardPanel");
 function activate(context) {
     const outputChannel = vscode.window.createOutputChannel("Ralph Loop");
     outputChannel.appendLine("Ralph Loop for Antigravity extension is now active!");
@@ -140,6 +141,7 @@ function activate(context) {
         vscode.commands.registerCommand("ralph.configureStableThreshold", () => configCommands.configureStableThreshold(context)),
         vscode.commands.registerCommand("ralph.selectTaskFile", () => (0, discovery_1.selectTaskFile)(context)),
         vscode.commands.registerCommand("ralph.showOutput", () => state.outputChannel.show()),
+        vscode.commands.registerCommand("ralph.openDashboard", () => dashboardPanel_1.DashboardPanel.createOrShow(context.extensionUri)),
         vscode.commands.registerCommand("ralph.reportBug", () => {
             vscode.env.openExternal(vscode.Uri.parse("https://github.com/afganrasulov/ralph-loop-pro-for-antigravity/issues/new?template=bug_report.yml"));
         }),

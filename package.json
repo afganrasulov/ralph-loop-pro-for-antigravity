@@ -3,7 +3,7 @@
   "displayName": "Ralph Loop Pro for Antigravity",
   "description": "⚠️ ALPHA — An autonomous AI agent extension for Antigravity. Automates multi-step coding tasks with intelligent loop execution and model selection. Early release — expect bugs, improvements coming with each update.",
   "icon": "resources/icons/logo.png",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "publisher": "afganrasulov",
   "license": "MIT",
   "repository": {
@@ -102,6 +102,12 @@
         "title": "Toggle Debug Logging",
         "category": "Ralph",
         "icon": "$(debug)"
+      },
+      {
+        "command": "ralph.openDashboard",
+        "title": "Open Ralph Dashboard",
+        "category": "Ralph",
+        "icon": "$(dashboard)"
       }
     ],
     "menus": {
@@ -120,6 +126,11 @@
           "command": "ralph.stop",
           "when": "view == ralphLoopView && ralph.isRunning",
           "group": "navigation@3"
+        },
+        {
+          "command": "ralph.openDashboard",
+          "when": "view == ralphLoopView",
+          "group": "navigation@4"
         }
       ]
     },
@@ -279,7 +290,7 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "echo skipping compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",

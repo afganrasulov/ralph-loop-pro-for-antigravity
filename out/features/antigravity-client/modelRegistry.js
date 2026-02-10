@@ -17,9 +17,7 @@ const FALLBACK_MODELS = [
     { name: "Gemini 3 Pro (High)", id: 1008 },
     { name: "Claude Sonnet 4.5", id: 333 },
     { name: "Claude Sonnet 4.5 (Thinking)", id: 334 },
-    { name: "Claude Opus 4.6", id: 1012 },
-    { name: "Claude Opus 4.6 (Thinking)", id: 1012 },
-    { name: "GPT-OSS-120B (Medium)", id: 342 },
+    { name: "Claude Opus 4.6", id: 1026 },
 ];
 const FALLBACK_DEFAULT = "Gemini 3 Flash";
 
