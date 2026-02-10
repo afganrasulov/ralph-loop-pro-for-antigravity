@@ -1,22 +1,22 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function (o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
     if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
+        desc = { enumerable: true, get: function () { return m[k]; } };
     }
     Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
+}) : (function (o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
 }));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function (o, v) {
     Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
+}) : function (o, v) {
     o["default"] = v;
 });
 var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
+    var ownKeys = function (o) {
         ownKeys = Object.getOwnPropertyNames || function (o) {
             var ar = [];
             for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
@@ -43,6 +43,11 @@ const state = __importStar(require("../../shared/state"));
 const config_1 = require("./config");
 const iteration_1 = require("./iteration");
 async function startRalphLoop(context) {
+    // Fallback to global state context if not provided (e.g. called from Dashboard)
+    if (!context) {
+        context = state.extensionContext;
+    }
+
     if (state.ralphLoopStatus === "running") {
         vscode.window.showInformationMessage("Ralph Loop is already running");
         return;
@@ -109,7 +114,7 @@ async function startRalphLoop(context) {
             maxIterations: config.maxIterations,
             startTime: state.startTime,
         };
-        state.ralphLoopProvider.updateSession(session);
+        state.ralphLoopProvider?.updateSession(session);
         const loopPromise = (0, iteration_1.runRalphLoopIteration)(config, context);
         state.setCurrentLoopPromise(loopPromise);
         await loopPromise;
@@ -190,7 +195,7 @@ function pauseRalphLoop() {
             maxIterations: state.maxIterations,
             startTime: state.startTime,
         };
-        state.ralphLoopProvider.updateSession(session);
+        state.ralphLoopProvider?.updateSession(session);
     }
 }
 async function emergencyStopRalphLoop() {
@@ -259,7 +264,7 @@ async function emergencyStopRalphLoop() {
             maxIterations: state.maxIterations,
             startTime: state.startTime,
         };
-        state.ralphLoopProvider.updateSession(session);
+        state.ralphLoopProvider?.updateSession(session);
     }
     state.setStopRequested(false);
     state.setCurrentLoopPromise(null);

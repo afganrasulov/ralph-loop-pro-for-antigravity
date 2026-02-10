@@ -37,8 +37,7 @@ exports.DashboardPanel = void 0;
 const vscode = __importStar(require("vscode"));
 const path = __importStar(require("path"));
 const fs = __importStar(require("fs"));
-const state = __importStar(require("../../shared/state"));
-const loopCommands = __importStar(require("../loop-engine/commands"));
+const modelRegistry = __importStar(require("../antigravity-client/modelRegistry"));
 
 class DashboardPanel {
     constructor(panel, extensionUri) {
@@ -56,14 +55,19 @@ class DashboardPanel {
         this._panel.onDidChangeViewState(() => {
             if (this._panel.visible) {
                 this._update();
+                this._sendInitialState();
             }
         }, null, this._disposables);
 
         // Handle messages from the webview
-        this._panel.webview.onDidReceiveMessage(message => {
+        this._panel.webview.onDidReceiveMessage(async (message) => {
             switch (message.command) {
                 case 'start':
-                    this._handleStart(message.config);
+                    await this._handleSyncConfig(message.config);
+                    loopCommands.startRalphLoop(undefined);
+                    break;
+                case 'syncConfig':
+                    await this._handleSyncConfig(message.config);
                     break;
                 case 'stop':
                     loopCommands.stopRalphLoop();
@@ -74,13 +78,17 @@ class DashboardPanel {
                 case 'resume':
                     loopCommands.pauseRalphLoop();
                     break;
+                case 'openSettings':
+                    vscode.commands.executeCommand('workbench.action.openSettings', 'ralphLoop');
+                    break;
                 case 'ready':
+                    this._sendModels();
                     this._sendInitialState();
                     break;
             }
         }, null, this._disposables);
 
-        // Periodically update the UI with state
+        // Periodically update the UI with dynamic state (status, timer, iterations)
         this._updateInterval = setInterval(() => {
             this._sendInitialState();
         }, 1000);
@@ -122,21 +130,46 @@ class DashboardPanel {
         }
     }
 
-    async _handleStart(config) {
-        // Apply config to workspace state
+    async _handleSyncConfig(config) {
+        if (!config) return;
         const cfg = vscode.workspace.getConfiguration("ralphLoop");
-        await cfg.update("defaultMode", config.mode, vscode.ConfigurationTarget.Workspace);
-        await cfg.update("defaultModel", config.model, vscode.ConfigurationTarget.Workspace);
-        await cfg.update("maxIterations", config.maxIterations, vscode.ConfigurationTarget.Workspace);
+        const workspaceState = state.extensionContext?.workspaceState;
 
-        // Start the loop
-        loopCommands.startRalphLoop(undefined); // context should be handled globally or we can pass if needed
+        if (config.mode) await cfg.update("defaultMode", config.mode, vscode.ConfigurationTarget.Workspace);
+        if (config.model) await cfg.update("defaultModel", config.model, vscode.ConfigurationTarget.Workspace);
+        if (config.maxIterations !== undefined) await cfg.update("maxIterations", config.maxIterations, vscode.ConfigurationTarget.Workspace);
+        if (config.promptFile !== undefined) await cfg.update("promptFile", config.promptFile, vscode.ConfigurationTarget.Workspace);
+        if (config.taskFile !== undefined) await cfg.update("taskFile", config.taskFile, vscode.ConfigurationTarget.Workspace);
+        if (config.progressFile !== undefined) await cfg.update("progressFile", config.progressFile, vscode.ConfigurationTarget.Workspace);
+        if (config.stableThreshold !== undefined) await cfg.update("stableThreshold", config.stableThreshold, vscode.ConfigurationTarget.Workspace);
+
+        if (workspaceState) {
+            if (config.useGit !== undefined) await workspaceState.update("ralph.useGit", config.useGit);
+            if (config.createBranch !== undefined) await workspaceState.update("ralph.createBranchEverySession", config.createBranch);
+            if (config.pseudoRalph !== undefined) await workspaceState.update("ralph.pseudoRalphMode", config.pseudoRalph);
+        }
+
+        if (state.setPseudoRalphMode) state.setPseudoRalphMode(config.pseudoRalph);
+    }
+
+    _sendModels() {
+        const models = modelRegistry.getModelList().map(name => ({
+            name: name,
+            id: name // We use name as ID for the selection usually
+        }));
+        this._panel.webview.postMessage({
+            type: 'updateModels',
+            models: models,
+            currentModel: vscode.workspace.getConfiguration("ralphLoop").get("defaultModel")
+        });
     }
 
     _sendInitialState() {
         const elapsedTime = state.startTime
             ? this._formatElapsedTime(new Date().getTime() - state.startTime.getTime())
             : "00:00";
+
+        const workspaceState = state.extensionContext?.workspaceState;
 
         this._panel.webview.postMessage({
             type: 'updateState',
@@ -146,8 +179,15 @@ class DashboardPanel {
                 maxIterations: state.maxIterations,
                 elapsedTime: elapsedTime,
                 cascadeId: state.currentCascadeId,
-                mode: vscode.workspace.getConfiguration("ralphLoop").get("defaultMode"),
-                model: vscode.workspace.getConfiguration("ralphLoop").get("defaultModel")
+                mode: config.get("defaultMode"),
+                model: config.get("defaultModel"),
+                promptFile: config.get("promptFile"),
+                taskFile: config.get("taskFile"),
+                progressFile: config.get("progressFile"),
+                stableThreshold: config.get("stableThreshold"),
+                pseudoRalphMode: workspaceState ? workspaceState.get("ralph.pseudoRalphMode", false) : state.pseudoRalphMode,
+                useGit: workspaceState ? workspaceState.get("ralph.useGit", true) : true,
+                createBranchEverySession: workspaceState ? workspaceState.get("ralph.createBranchEverySession", true) : true
             }
         });
     }

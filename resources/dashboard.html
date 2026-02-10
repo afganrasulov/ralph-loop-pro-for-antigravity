@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ralph Loop Dashboard</title>
     <link rel="stylesheet" href="{cssUri}">
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Sidebar: Configuration -->
@@ -40,24 +42,71 @@
                 </div>
                 <div class="config-item">
                     <select id="modelSelect">
-                        <option value="Gemini 3 Flash">Gemini 3 Flash</option>
-                        <option value="Gemini 3 Pro (Low)">Gemini 3 Pro (Low)</option>
-                        <option value="Claude Sonnet 4.5">Claude Sonnet 4.5</option>
-                        <option value="Claude Opus 4.6">Claude Opus 4.6</option>
+                        <!-- Dynamically populated -->
                     </select>
                 </div>
             </div>
 
             <div class="config-group">
-                <div class="config-label">Iteration Limits</div>
+                <div class="config-label">File Settings</div>
+                <div class="config-item file-input">
+                    <span class="input-icon">📄</span>
+                    <input type="text" id="promptFile" placeholder="Prompt File (e.g. PROMPT.md)">
+                </div>
+                <div class="config-item file-input">
+                    <span class="input-icon">📋</span>
+                    <input type="text" id="taskFile" placeholder="Task File (e.g. TASKS.md)">
+                </div>
+                <div class="config-item file-input">
+                    <span class="input-icon">📝</span>
+                    <input type="text" id="progressFile" placeholder="Progress File (e.g. progress.txt)">
+                </div>
+            </div>
+
+            <div class="config-group">
+                <div class="config-label">Limits & Thresholds</div>
                 <div class="config-item">
-                    <input type="number" id="maxIterations" value="50" min="1" max="1000">
+                    <div class="input-with-label">
+                        <span>Max Iterations:</span>
+                        <input type="number" id="maxIterations" value="50" min="1" max="1000">
+                    </div>
+                </div>
+                <div class="config-item">
+                    <div class="input-with-label">
+                        <span>Stable Threshold:</span>
+                        <input type="number" id="stableThreshold" value="7" min="1" max="100">
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-group">
+                <button id="advancedToggle" class="btn-toggle">
+                    <span class="icon">⚙</span>
+                    <span>Advanced Settings</span>
+                    <span id="advancedChevron" class="chevron">▶</span>
+                </button>
+                <div id="advancedContent" class="advanced-content hidden">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="pseudoRalph">
+                        <span class="checkmark"></span>
+                        Pseudo Ralph (Reuse session)
+                    </label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="useGit">
+                        <span class="checkmark"></span>
+                        Enable Git Integration
+                    </label>
+                    <label class="checkbox-container" id="branchOption">
+                        <input type="checkbox" id="createBranch">
+                        <span class="checkmark"></span>
+                        New branch per session
+                    </label>
                 </div>
             </div>
 
             <div class="config-group" style="margin-top: auto;">
                 <button id="settingsBtn" class="btn btn-secondary">
-                    <span>⚙</span> Advanced Settings
+                    <span>⚙</span> VS Code Settings
                 </button>
             </div>
         </aside>
@@ -85,16 +134,20 @@
                 </div>
                 <div class="stat-card">
                     <div class="config-label">Cascade Session</div>
-                    <div id="cascadeId" class="stat-value" style="font-size: 1rem; color: var(--text-muted);">None</div>
+                    <div id="cascadeId" class="stat-value"
+                        style="font-size: 1rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        None</div>
                 </div>
             </section>
 
             <section class="log-container" id="logContainer">
-                <div class="log-entry"><span class="log-time">[18:42:00]</span> <span class="log-info">Ready to start autonomous loop...</span></div>
+                <div class="log-entry"><span class="log-time">[Ready]</span> <span class="log-info">Dashboard
+                        initialized. Waiting for loop start...</span></div>
             </section>
         </main>
     </div>
 
     <script src="{jsUri}"></script>
 </body>
+
 </html>

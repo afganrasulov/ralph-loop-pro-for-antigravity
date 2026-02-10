@@ -36,8 +36,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
 exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
-const ralphLoopProvider_1 = require("./features/sidebar/ralphLoopProvider");
-const helpProvider_1 = require("./features/sidebar/helpProvider");
 const state = __importStar(require("./shared/state"));
 const configCommands = __importStar(require("./features/configuration/config"));
 const loopCommands = __importStar(require("./features/loop-engine/commands"));
@@ -48,13 +46,15 @@ const dashboardPanel_1 = require("./features/dashboard/dashboardPanel");
 function activate(context) {
     const outputChannel = vscode.window.createOutputChannel("Ralph Loop");
     outputChannel.appendLine("Ralph Loop for Antigravity extension is now active!");
-    const provider = new ralphLoopProvider_1.RalphLoopProvider(context);
+
     // Initialize global state
-    state.initializeState(outputChannel, provider);
+    state.initializeState(outputChannel, context);
+
     // Initialize model registry (non-blocking remote fetch)
     modelRegistry.initialize(context, outputChannel).catch((err) => {
         outputChannel.appendLine(`[ModelRegistry] Initialization failed: ${err.message}`);
     });
+
     const appName = vscode.env.appName.toLowerCase();
     const uriScheme = vscode.env.uriScheme.toLowerCase();
     const execPath = (process.execPath || "").toLowerCase();
@@ -69,62 +69,13 @@ function activate(context) {
         execPath.endsWith("/code-oss") ||
         execPath.endsWith("/code.exe");
     state.setHostBlocked(isVSCode && !isAntigravity);
-    // Register tree view with checkbox support
-    const treeView = vscode.window.createTreeView("ralphLoopView", {
-        treeDataProvider: provider,
-        manageCheckboxStateManually: true,
-    });
-    const helpProvider = new helpProvider_1.HelpProvider();
-    const helpTreeView = vscode.window.createTreeView("ralphHelpView", {
-        treeDataProvider: helpProvider,
-    });
-    // Handle checkbox state changes
-    treeView.onDidChangeCheckboxState(async (e) => {
-        for (const [item, newState] of e.items) {
-            if (item.id === "config-pseudo-ralph") {
-                const enabled = newState === vscode.TreeItemCheckboxState.Checked;
-                await context.workspaceState.update("ralph.pseudoRalphMode", enabled);
-                state.setPseudoRalphMode(enabled);
-                state.progressLogger?.info(`Pseudo Ralph mode ${enabled ? "enabled" : "disabled"}`, "Config");
-                provider.refresh();
-            }
-            else if (item.id === "config-use-git") {
-                const enabled = newState === vscode.TreeItemCheckboxState.Checked;
-                const workspaceState = context.workspaceState;
-                await workspaceState.update("ralph.useGit", enabled);
-                state.progressLogger?.info(`Git integration ${enabled ? "enabled" : "disabled"}`, "Config");
-                // When turning off Use Git, also disable Create new branch every session
-                if (!enabled) {
-                    const currentCreateBranch = workspaceState.get("ralph.createBranchEverySession", true);
-                    await workspaceState.update("ralph.createBranchEverySessionBeforeGitOff", currentCreateBranch);
-                    await workspaceState.update("ralph.createBranchEverySession", false);
-                    state.progressLogger?.info("Create new branch every session disabled (Git is off)", "Config");
-                }
-                else {
-                    const previousCreateBranch = workspaceState.get("ralph.createBranchEverySessionBeforeGitOff") ?? true;
-                    await workspaceState.update("ralph.createBranchEverySession", previousCreateBranch);
-                    await workspaceState.update("ralph.createBranchEverySessionBeforeGitOff", undefined);
-                }
-                provider.refresh();
-            }
-            else if (item.id === "config-create-branch-every-session") {
-                const useGit = context.workspaceState.get("ralph.useGit", true);
-                // Only allow toggling if Use Git is enabled
-                if (useGit) {
-                    const enabled = newState === vscode.TreeItemCheckboxState.Checked;
-                    await context.workspaceState.update("ralph.createBranchEverySession", enabled);
-                    state.progressLogger?.info(`Create new branch every session ${enabled ? "enabled" : "disabled"}`, "Config");
-                    provider.refresh();
-                }
-            }
-        }
-    });
-    context.subscriptions.push(treeView);
-    context.subscriptions.push(helpTreeView);
+
     // Initialize workspace state (defaults/migrations)
     (0, workspace_1.initializeWorkspaceState)(context);
+
     // Run initial autonomy check
     (0, workspace_1.checkAntigravityAutonomy)();
+
     // Register commands
     const commands = [
         vscode.commands.registerCommand("ralph.start", () => loopCommands.startRalphLoop(context)),
@@ -149,7 +100,6 @@ function activate(context) {
             const config = vscode.workspace.getConfiguration("ralphLoop");
             const currentValue = config.get("debugLogging", false);
             await config.update("debugLogging", !currentValue, vscode.ConfigurationTarget.Global);
-            helpProvider.refresh();
             state.progressLogger?.info(`Debug logging ${!currentValue ? "enabled" : "disabled"}`, "Config");
         }),
         vscode.commands.registerCommand("ralph.togglePseudoRalph", async () => {
@@ -158,7 +108,6 @@ function activate(context) {
             await context.workspaceState.update("ralph.pseudoRalphMode", enabled);
             state.setPseudoRalphMode(enabled);
             state.progressLogger?.info(`Pseudo Ralph mode ${enabled ? "enabled" : "disabled"}`, "Config");
-            provider.refresh();
         }),
         vscode.commands.registerCommand("ralph.toggleUseGit", async () => {
             const workspaceState = context.workspaceState;
@@ -177,19 +126,15 @@ function activate(context) {
                 await workspaceState.update("ralph.createBranchEverySession", previousCreateBranch);
                 await workspaceState.update("ralph.createBranchEverySessionBeforeGitOff", undefined);
             }
-            provider.refresh();
         }),
         vscode.commands.registerCommand("ralph.toggleCreateBranchEverySession", async () => {
             const workspaceState = context.workspaceState;
             const useGit = workspaceState.get("ralph.useGit", true);
-            if (!useGit) {
-                return;
-            }
+            if (!useGit) return;
             const current = workspaceState.get("ralph.createBranchEverySession", true);
             const enabled = !current;
             await workspaceState.update("ralph.createBranchEverySession", enabled);
             state.progressLogger?.info(`Create new branch every session ${enabled ? "enabled" : "disabled"}`, "Config");
-            provider.refresh();
         }),
     ];
     context.subscriptions.push(...commands);
