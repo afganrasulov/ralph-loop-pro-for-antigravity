@@ -1,6 +1,6 @@
-# Ralph Loop for Antigravity
+# Ralph Loop Pro for Antigravity
 
-A VSCode extension that brings the Ralph Loop autonomous AI agent methodology to Antigravity.
+An enhanced VSCode extension that brings the Ralph Loop autonomous AI agent methodology to Antigravity, featuring a dynamic model registry.
 
 ## Overview
 
@@ -184,18 +184,12 @@ The extension opens your task/prompt file before starting to ensure the agent wo
 
 ## Links
 
-- [GitHub Repository](https://github.com/abhishekbhakat/ralph-loop-for-antigravity)
-- [Report Issues](https://github.com/abhishekbhakat/ralph-loop-for-antigravity/issues)
+- [GitHub Repository](https://github.com/afganrasulov/ralph-loop-pro-for-antigravity)
+- [Report Issues](https://github.com/afganrasulov/ralph-loop-pro-for-antigravity/issues)
 
 ## Requirements
 
-- VS Code 1.75.0 or later
-- Antigravity in agent driven mode
-- A workspace folder with task files
-
 ## License
-
-MIT
 
 ---
 

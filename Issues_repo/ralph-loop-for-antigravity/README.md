@@ -1,6 +1,6 @@
-# Ralph Loop for Antigravity - Community Issues
+# Ralph Loop Pro for Antigravity - Community Issues
 
-Community issue tracker for [Ralph Loop for Antigravity](https://github.com/abhishekbhakat/ralph-loop-for-antigravity), a VS Code extension that enables autonomous AI agent execution using Antigravity.
+Community issue tracker for [Ralph Loop Pro for Antigravity](https://github.com/afganrasulov/ralph-loop-pro-for-antigravity), a VS Code extension that enables autonomous AI agent execution using Antigravity.
 
 ## What is Ralph Loop?
 
@@ -50,22 +50,26 @@ Before opening an issue:
 ## Common Issues
 
 ### "No task file selected"
+
 Select a task file in the sidebar Configuration section before starting the loop.
 
 ### "No workspace folder open"
+
 Open a folder in VS Code before starting Ralph Loop.
 
 ### Loop not responding
+
 Use `Ralph: Emergency Stop Ralph Loop` from the Command Palette (Cmd/Ctrl+Shift+P).
 
 ### Token extraction failing
+
 Ensure Antigravity is running. If auto-discovery fails, manually configure the CSRF token and port in settings.
 
 ## Links
 
-- [Extension Repository](https://github.com/abhishekbhakat/ralph-loop-for-antigravity)
-- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=abhishekbhakat.ralph-loop-for-antigravity)
-- [Open VSX Registry](https://open-vsx.org/extension/abhishekbhakat/ralph-loop-for-antigravity)
+- [Extension Repository](https://github.com/afganrasulov/ralph-loop-pro-for-antigravity)
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=afganrasulov.ralph-loop-pro-for-antigravity)
+- [Open VSX Registry](https://open-vsx.org/extension/afganrasulov/ralph-loop-pro-for-antigravity)
 
 ## License
 

@@ -4,16 +4,16 @@
   "description": "A VSCode extension that brings the Ralph Loop autonomous AI agent methodology to Antigravity",
   "icon": "resources/icons/logo.png",
   "version": "0.5.1",
-  "publisher": "abhishekbhakat",
+  "publisher": "afganrasulov",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/abhishekbhakat/ralph-loop-for-antigravity"
+    "url": "https://github.com/afganrasulov/ralph-loop-pro-for-antigravity"
   },
   "bugs": {
-    "url": "https://github.com/abhishekbhakat/ralph-loop-for-antigravity/issues"
+    "url": "https://github.com/afganrasulov/ralph-loop-pro-for-antigravity/issues"
   },
-  "homepage": "https://github.com/abhishekbhakat/ralph-loop-for-antigravity#readme",
+  "homepage": "https://github.com/afganrasulov/ralph-loop-pro-for-antigravity#readme",
   "engines": {
     "vscode": "^1.75.0"
   },

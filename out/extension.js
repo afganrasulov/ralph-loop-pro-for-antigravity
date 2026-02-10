@@ -141,7 +141,7 @@ function activate(context) {
         vscode.commands.registerCommand("ralph.selectTaskFile", () => (0, discovery_1.selectTaskFile)(context)),
         vscode.commands.registerCommand("ralph.showOutput", () => state.outputChannel.show()),
         vscode.commands.registerCommand("ralph.reportBug", () => {
-            vscode.env.openExternal(vscode.Uri.parse("https://github.com/abhishekbhakat/ralph-loop-for-antigravity/issues/new?template=bug_report.yml"));
+            vscode.env.openExternal(vscode.Uri.parse("https://github.com/afganrasulov/ralph-loop-pro-for-antigravity/issues/new?template=bug_report.yml"));
         }),
         vscode.commands.registerCommand("ralph.toggleDebugLogging", async () => {
             const config = vscode.workspace.getConfiguration("ralphLoop");

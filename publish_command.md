@@ -25,14 +25,14 @@
 3. Login:
 
    ```bash
-   npx vsce login abhishekbhakat
+   npx vsce login afganrasulov
    ```
 
 ### Publish
 
 ```bash
 # Publish pre-built .vsix
-npx vsce publish --packagePath ralph-loop-for-antigravity-<version>.vsix
+npx vsce publish --packagePath ralph-loop-pro-for-antigravity-<version>.vsix
 
 # Or build and publish in one step
 npx vsce publish
@@ -59,10 +59,10 @@ npx vsce publish patch
 
 ```bash
 # Publish pre-built .vsix
-npx ovsx publish ralph-loop-for-antigravity-<version>.vsix -p $OVSX_PAT
+npx ovsx publish ralph-loop-pro-for-antigravity-<version>.vsix -p $OVSX_PAT
 
 # Or without env var
-npx ovsx publish ralph-loop-for-antigravity-<version>.vsix -p <your-token>
+npx ovsx publish ralph-loop-pro-for-antigravity-<version>.vsix -p <your-token>
 ```
 
 ---
@@ -76,10 +76,10 @@ npx ovsx publish ralph-loop-for-antigravity-<version>.vsix -p <your-token>
 make build
 
 # 3. Publish to VS Code Marketplace
-npx vsce publish --packagePath ralph-loop-for-antigravity-<version>.vsix
+npx vsce publish --packagePath ralph-loop-pro-for-antigravity-<version>.vsix
 
 # 4. Publish to Open VSX
-npx ovsx publish ralph-loop-for-antigravity-<version>.vsix -p $OVSX_PAT
+npx ovsx publish ralph-loop-pro-for-antigravity-<version>.vsix -p $OVSX_PAT
 ```
 
 ---
@@ -91,10 +91,3 @@ npx ovsx publish ralph-loop-for-antigravity-<version>.vsix -p $OVSX_PAT
 | `Extension is already published` | Bump the version in `package.json` first |
 | `Personal Access Token verification failed` | Regenerate PAT with correct scopes |
 | `Publisher not found` | Create publisher on respective marketplace |
-
-
-### Copy to Ryzen
-
-```bash
-scp ralph-loop-for-antigravity-0.4.0.vsix 192.168.3.45:/Users/agent/Downloads/
-```

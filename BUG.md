@@ -1,10 +1,11 @@
 # Bug Report - v0.5.0
 
-Reported by: @k1lgor ([Issue #2](https://github.com/abhishekbhakat/ralph-loop-for-antigravity/issues/2))
+Reported by: @k1lgor ([Issue #2](https://github.com/afganrasulov/ralph-loop-pro-for-antigravity/issues/2))
 
 ## Bug 1: Configuration Settings Not Registered
 
 **Symptoms:**
+
 - "Use Git" and "Create new branch every session" checkboxes reset when making other configuration changes
 - New branch is still created despite unchecking the option
 - VSCode shows error notifications:
@@ -22,6 +23,7 @@ Add the missing configuration properties to `package.json`.
 ## Bug 2: progress.txt Not Being Edited
 
 **Symptoms:**
+
 - The extension no longer edits `progress.txt` at all during loop iterations
 
 **Root Cause:**
