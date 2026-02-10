@@ -63,6 +63,9 @@ npx ovsx publish ralph-loop-pro-for-antigravity-<version>.vsix -p $OVSX_PAT
 
 # Or without env var
 npx ovsx publish ralph-loop-pro-for-antigravity-<version>.vsix -p <your-token>
+
+# Current Release (v1.0.6)
+npx ovsx publish ralph-loop-pro-for-antigravity-1.0.6.vsix -p <your-token>
 ```
 
 ---

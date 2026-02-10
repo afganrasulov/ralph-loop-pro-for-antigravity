@@ -45,6 +45,7 @@ const modelRegistry = require("./features/antigravity-client/modelRegistry");
 const dashboardPanel_1 = require("./features/dashboard/dashboardPanel");
 function activate(context) {
     const outputChannel = vscode.window.createOutputChannel("Ralph Loop");
+    console.log("Extension activation started");
     outputChannel.appendLine("Ralph Loop for Antigravity extension is now active!");
 
     // Initialize global state

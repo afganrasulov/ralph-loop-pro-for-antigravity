@@ -250,6 +250,7 @@
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "echo \"No unit tests configured\" && exit 0",
+    "test:e2e": "node test/e2e/runTest.js",
     "test:integration": "npx ts-node test/integration/test_antigravity_api.ts",
     "test:models": "npx ts-node test/integration/test_models_fixed.ts",
     "package": "vsce package"
@@ -263,6 +264,8 @@
     "typescript": "^5.0.0",
     "@vscode/test-electron": "^2.4.0",
     "@vscode/vsce": "^3.7.1",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "mocha": "^10.7.0",
+    "glob": "^10.3.0"
   }
 }

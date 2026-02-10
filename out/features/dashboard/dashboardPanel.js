@@ -38,6 +38,9 @@ const vscode = __importStar(require("vscode"));
 const path = __importStar(require("path"));
 const fs = __importStar(require("fs"));
 const modelRegistry = __importStar(require("../antigravity-client/modelRegistry"));
+const loopCommands = __importStar(require("../loop-engine/commands"));
+const state = __importStar(require("../../shared/state"));
+const config = vscode.workspace.getConfiguration("ralphLoop");
 
 class DashboardPanel {
     constructor(panel, extensionUri) {
@@ -99,11 +102,14 @@ class DashboardPanel {
             ? vscode.window.activeTextEditor.viewColumn
             : undefined;
 
+        console.log("DashboardPanel.createOrShow called");
         if (DashboardPanel.currentPanel) {
+            console.log("Revealing existing panel");
             DashboardPanel.currentPanel._panel.reveal(column);
             return;
         }
 
+        console.log("Creating new WebviewPanel");
         const panel = vscode.window.createWebviewPanel(
             DashboardPanel.viewType,
             "Ralph Loop Dashboard",
