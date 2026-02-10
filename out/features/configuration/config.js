@@ -41,8 +41,8 @@ exports.setConfigTaskFile = setConfigTaskFile;
 exports.setConfigProgressFile = setConfigProgressFile;
 exports.configureStableThreshold = configureStableThreshold;
 const vscode = __importStar(require("vscode"));
-const state = __importStar(require("../state"));
-const discovery_1 = require("../utils/discovery");
+const state = __importStar(require("../../shared/state"));
+const discovery_1 = require("../../shared/utils/discovery");
 async function configureIterations(context) {
     const currentIterations = context.workspaceState.get("ralph.lastMaxIterations") ?? 50;
     const result = await vscode.window.showInputBox({
@@ -81,7 +81,7 @@ async function setConfigModel(context) {
     // Load models dynamically from registry
     let models;
     try {
-        const registry = require("../antigravityClient/modelRegistry");
+        const registry = require("../antigravity-client/modelRegistry");
         models = registry.getModelList();
     }
     catch (e) {

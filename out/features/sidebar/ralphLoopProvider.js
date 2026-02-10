@@ -35,7 +35,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RalphLoopItem = exports.RalphLoopProvider = void 0;
 const vscode = __importStar(require("vscode"));
-const state = __importStar(require("./state"));
+const state = __importStar(require("../../shared/state"));
 class RalphLoopProvider {
     constructor(context) {
         this.context = context;

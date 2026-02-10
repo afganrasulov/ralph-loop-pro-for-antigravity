@@ -39,9 +39,9 @@ exports.pauseRalphLoop = pauseRalphLoop;
 exports.emergencyStopRalphLoop = emergencyStopRalphLoop;
 exports.showQuickActions = showQuickActions;
 const vscode = __importStar(require("vscode"));
-const state = __importStar(require("../state"));
-const config_1 = require("../loop/config");
-const iteration_1 = require("../loop/iteration");
+const state = __importStar(require("../../shared/state"));
+const config_1 = require("./config");
+const iteration_1 = require("./iteration");
 async function startRalphLoop(context) {
     if (state.ralphLoopStatus === "running") {
         vscode.window.showInformationMessage("Ralph Loop is already running");

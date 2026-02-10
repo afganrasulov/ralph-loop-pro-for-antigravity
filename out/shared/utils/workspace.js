@@ -37,7 +37,7 @@ exports.checkAntigravityAutonomy = checkAntigravityAutonomy;
 exports.initializeWorkspaceState = initializeWorkspaceState;
 const vscode = __importStar(require("vscode"));
 const state = __importStar(require("../state"));
-const antigravityClient_1 = require("../antigravityClient");
+const antigravityClient_1 = require("../../features/antigravity-client");
 async function checkAntigravityAutonomy() {
     // Note: This check is informational only. The protobuf response parsing
     // may not be accurate, so we only log debug info and don't show warnings.

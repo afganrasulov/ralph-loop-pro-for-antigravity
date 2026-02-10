@@ -36,9 +36,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.spawnFreshAgentContext = spawnFreshAgentContext;
 exports.processIterationWithFreshContext = processIterationWithFreshContext;
 const vscode = __importStar(require("vscode"));
-const state = __importStar(require("../state"));
-const antigravityClient_1 = require("../antigravityClient");
-const git_1 = require("../utils/git");
+const state = __importStar(require("../../shared/state"));
+const antigravityClient_1 = require("../antigravity-client");
+const git_1 = require("../../shared/utils/git");
 async function spawnFreshAgentContext(config) {
     state.progressLogger?.streamProgress("Spawning", 2, 5, "Creating fresh agent context");
     const agentContext = {

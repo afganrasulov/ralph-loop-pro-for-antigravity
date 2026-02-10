@@ -49,8 +49,8 @@ exports.setPersistentCascadeId = setPersistentCascadeId;
 exports.setHostBlocked = setHostBlocked;
 exports.initializeState = initializeState;
 const vscode = __importStar(require("vscode"));
-const progressLogger_1 = require("./services/progressLogger");
-const notification_1 = require("./services/notification");
+const progressLogger_1 = require("../features/notifications/progressLogger");
+const notification_1 = require("../features/notifications/notification");
 // Global state - shared across all modules
 exports.ralphLoopStatus = "stopped";
 exports.currentIteration = 0;

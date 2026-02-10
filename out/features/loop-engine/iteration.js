@@ -35,9 +35,9 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.runRalphLoopIteration = runRalphLoopIteration;
 const vscode = __importStar(require("vscode"));
-const state = __importStar(require("../state"));
+const state = __importStar(require("../../shared/state"));
 const agentRunner_1 = require("./agentRunner");
-const git_1 = require("../utils/git");
+const git_1 = require("../../shared/utils/git");
 async function isCompletionMarkerPresent(config) {
     if (!config.progressFile || !config.doneMarker) {
         return false;
